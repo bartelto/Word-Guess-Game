@@ -1,58 +1,112 @@
-//var instr = document.getElementById('instructions');
+
+function replaceAt(string, index, replace) {
+    return string.substring(0, index) + replace + string.substring(index + 1);
+}
+
+function isLetter(inputChr) {
+    let letters = /^[a-zA-Z]+$/;
+    if (inputChr.match(letters)) {
+        return true;
+    }
+    else { 
+        return false; 
+    }
+}
+  
 
 let game = {
     wordBank: ["Cameron", "Sloan", "Jeannie", "Edward Rooney", "Grace", "Abe Froman", "Ferris Bueller"],
-    currentWord: "",
-    displayedWord: "",
+    currentWord: "", // chosen from the word bank
+    displayedWord: "", // only showing the letters that have been guessed
     started: false,
     guessesAllowed: 10,
     guessesRemaining: 0,
+    wrongLetters: "",
     numWins: 0,
-    instructions: "",
-    
+
+    // variables linked to screen elements
+    txtInstructions: "",
+    txtDisplayedWord: "",
+    txtGuessesRemaining: "",
+    txtWrongLetters: "",
+    txtNumWins: "",
     
     init: function() {
         console.log("init function");
-        this.instructions = document.getElementById('instructions');
-        this.numWins = document.getElementById('numWins');
-        this.guessesRemaining = document.getElementById('guessesRemaining');
-        this.displayedWord = document.getElementById('displayedWord');
+        this.txtInstructions = document.getElementById('instructions');
+        this.txtNumWins = document.getElementById('numWins');
+        this.txtGuessesRemaining = document.getElementById('guessesRemaining');
+        this.txtDisplayedWord = document.getElementById('DisplayedWord');
+        this.txtWrongLetters = document.getElementById('wrongLetters');
     },
 
     start: function() {
         console.log("start function");
         this.started = true;
-        this.instructions.textContent = "Type a letter to guess!"; // Clear instructions from screen
+        this.txtInstructions.textContent = "Type a letter to guess!"; // Clear txtInstructions from screen
         this.chooseWord();
         this.guessesRemaining = this.guessesAllowed;
+        this.wrongLetters = "";
+        this.updateScreen();
     },
 
     chooseWord: function() {
-        this.currentWord = this.wordBank[Math.floor(Math.random() * this.wordBank.length)];
+        this.currentWord = this.wordBank[Math.floor(Math.random() * this.wordBank.length)].toLowerCase();
         console.log("current word: " + this.currentWord);
-        this.displayedWord.textContent = ('_').repeat(this.currentWord.length);
-        //this.displayedWord.textContent = "Todd";
+        this.displayedWord = ('_').repeat(this.currentWord.length);
+        if (this.currentWord.includes(' ')) { // show spaces
+            let i = 0
+            while (this.currentWord.indexOf(' ', i) > -1) {
+                this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(' ', i), ' ');
+                i = this.currentWord.indexOf(' ', i) + 1;
+            }
+        }
     },
 
     guess: function(letter) {
         console.log("guess: " + letter);
         // Check if key is a letter
+        if (this.currentWord.includes(letter)) {
+            console.log("good guess!");
+            let i = 0
+            while (this.currentWord.indexOf(letter, i) > -1) {
+                this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(letter, i), letter);
+                i = this.currentWord.indexOf(letter, i) + 1;
+            }
+            if (this.displayedWord === this.currentWord) {
+                this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
+                this.numWins++;
+                this.started = false;
+            }
+        } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
+            console.log("bad guess!");
+            this.guessesRemaining--;
+            console.log("guesses remaining: " + this.guessesRemaining);
+            this.wrongLetters += letter;
+        }
+        this.updateScreen();
 
+        if (this.guessesRemaining <= 0) {
+            this.txtInstructions.textContent = "You lose! The correct answer was <b>" + this.currentWord + "<\b>. Press any key to play again.";
+            this.started = false;
+        }
     },
 
-    updateDisplayedWord: function() {
-
+    updateScreen: function() {
+        this.txtDisplayedWord.textContent = this.displayedWord.toUpperCase();
+        this.txtGuessesRemaining.textContent = this.guessesRemaining;
+        this.txtWrongLetters.textContent = this.wrongLetters.toUpperCase();
+        this.txtNumWins.textContent = this.numWins;
     }
 
 };
 
 game.init();
-//instr.textContent = "hello";
 
 document.onkeyup = function(event) {
     if (!game.started) {
         game.start();
-    } else {
+    } else if (isLetter(event.key)) {
         game.guess(event.key);
     }
     
