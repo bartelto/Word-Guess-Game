@@ -12,7 +12,6 @@ function isLetter(inputChr) {
         return false; 
     }
 }
-  
 
 let game = {
     wordBank: ["Cameron", "Sloan", "Jeannie", "Edward Rooney", "Grace", "Abe Froman", "Ferris Bueller"],
@@ -23,6 +22,8 @@ let game = {
     guessesRemaining: 0,
     wrongLetters: "",
     numWins: 0,
+    audioPlayer: "",
+    bigImage: "",
 
     // variables linked to screen elements
     txtInstructions: "",
@@ -34,10 +35,12 @@ let game = {
     init: function() {
         console.log("init function");
         this.txtInstructions = document.getElementById('instructions');
-        this.txtNumWins = document.getElementById('numWins');
-        this.txtGuessesRemaining = document.getElementById('guessesRemaining');
-        this.txtDisplayedWord = document.getElementById('DisplayedWord');
-        this.txtWrongLetters = document.getElementById('wrongLetters');
+        this.txtNumWins = document.getElementById('num-wins');
+        this.txtGuessesRemaining = document.getElementById('guesses-remaining');
+        this.txtDisplayedWord = document.getElementById('displayed-word');
+        this.txtWrongLetters = document.getElementById('wrong-letters');
+        this.audioPlayer = document.getElementsByTagName('audio')[0];
+        this.bigImage = document.getElementById('bigImage');
     },
 
     start: function() {
@@ -48,6 +51,9 @@ let game = {
         this.guessesRemaining = this.guessesAllowed;
         this.wrongLetters = "";
         this.updateScreen();
+        this.audioPlayer.pause();
+        this.audioPlayer.controls = false;
+        
     },
 
     chooseWord: function() {
@@ -77,6 +83,9 @@ let game = {
                 this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
                 this.numWins++;
                 this.started = false;
+                this.audioPlayer.play();
+                this.audioPlayer.controls = true;
+                this.bigImage.src = "assets/images/ferris-bueller.jpg";
             }
         } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
             console.log("bad guess!");
@@ -87,7 +96,7 @@ let game = {
         this.updateScreen();
 
         if (this.guessesRemaining <= 0) {
-            this.txtInstructions.textContent = "You lose! The correct answer was <b>" + this.currentWord + "<\b>. Press any key to play again.";
+            this.txtInstructions.textContent = "You lose! The correct answer was" + this.currentWord.toUpperCase() + ". Press any key to play again.";
             this.started = false;
         }
     },
@@ -109,7 +118,8 @@ document.onkeyup = function(event) {
     } else if (isLetter(event.key)) {
         game.guess(event.key);
     }
-    
+}
 
-  }
+
+  
 

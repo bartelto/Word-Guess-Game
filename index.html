@@ -10,13 +10,19 @@
 </head>
 <body>
     <h1>Word Guess Game</h1>
+    <div id="img-container">
+        <img id="big-image" src="">
+    </div>
     <p><span id="instructions">Press any key to get started!</span></p>
-    <p>Wins: <span id="numWins">0</span></p>
+    <p>Wins: <span id="num-wins">0</span></p>
     <p>Current Word:</p>
-    <p><span id="DisplayedWord">_ _ _ _ _ _</span></p>
-    <p>Number of guesses remaining: <span id="guessesRemaining">???</span></p>
-    <p>Letters already guessed: <span id="wrongLetters">???</span></p>
+    <p><span id="displayed-word"> </span></p>
+    <p>Number of guesses remaining: <span id="guesses-remaining">???</span></p>
+    <p>Letters already guessed: <span id="wrong-letters">???</span></p>
 
+    <audio id="audio-player" src="assets/audio/Oh-Yeah.mp3"></audio>
+    
+    
 
     <script src="assets/javascript/game.js"></script>
 </body>

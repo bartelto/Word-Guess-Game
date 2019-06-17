@@ -1,0 +1,14 @@
+#big-image {
+    width: 100%;
+    
+}
+
+#img-container {
+    overflow: hidden;
+    max-height: 200px;
+}   
+
+#displayed-word,
+#wrong-letters {
+    letter-spacing: 0.5em;
+}
