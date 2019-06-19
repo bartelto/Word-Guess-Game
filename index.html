@@ -9,35 +9,39 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-    <div id="img-container">
-        <img id="big-image" src="">
-    </div>
-    <h1>Ferris Bueller's</h1>
-    <h2>Word Guess Game</h2>
-    <div id="instructions-box">
-        <p><span id="instructions">Press any key to get started!</span></p>
-    </div> 
-    <div>
-        <div id="wins-box">
-            <p>Wins:</p> 
-            <div id="num-wins">0</div>
-        </div>
-        <div id="guesses-remaining-box">
-            <p>Guesses remaining:</p>  
-            <div id="guesses-remaining">0</p>
-        </div>  
-    </div>
-    <div id='word-box'>
-        <p>Current Word:</p>
-        <p><span id="displayed-word"> </span></p>
-    </div>
+    <header>
+        <div id="img-container">
+            <img id="big-image" src="">
+       
+                <div id="wins-box">
+                    <p>Wins:</p> 
+                    <div id="num-wins">0</div>
+                </div>
+                <div id="guesses-remaining-box">
+                    <p>Guesses remaining:</p>  
+                    <div id="guesses-remaining">0</p>
+                </div>  
+            </div>
+        <h1>Ferris Bueller's</h1>
+        <h2>Word Guess Game</h2>
+    </header>
+    <section id="game-main">
+        <div id="instructions-box">
+            <p><span id="instructions">Press any key to get started!</span></p>
+        </div> 
     
-    <div id='guess-box'>
-        <p>Letters already guessed:</p>
-        <p><span id="wrong-letters"> </span></p>
-    </div>
+        <div id='word-box'>
+            <p>Current Word:</p>
+            <p><span id="displayed-word"> </span></p>
+        </div>
+        
+        <div id='guess-box'>
+            <p>Letters already guessed:</p>
+            <p><span id="wrong-letters"> </span></p>
+        </div>
 
-    <audio id="audio-player" src="assets/audio/Oh-Yeah.mp3"></audio>
+        <audio id="audio-player" src="assets/audio/Oh-Yeah.mp3"></audio>    
+    </section>
     
     
 
