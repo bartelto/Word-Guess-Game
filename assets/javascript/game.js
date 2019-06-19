@@ -5,7 +5,7 @@ function replaceAt(string, index, replace) {
 
 function isLetter(inputChr) {
     let letters = /^[a-zA-Z]+$/;
-    if (inputChr.match(letters)) {
+    if (inputChr.length == 1 && inputChr.match(letters)) {
         return true;
     }
     else { 
@@ -36,8 +36,8 @@ let game = {
     ],
     songBank: [
         "Danke-Schoen.mp3",
-        "Oh-Yeah.mp3"//,
-        //"Twist-and-Shout.mp3"
+        "Oh-Yeah.mp3",
+        "Twist-and-Shout.mp3"
     ],
     currentWord: "", // chosen from the word bank
     currentImage: "", // corresponds to the mystery word
@@ -112,30 +112,32 @@ let game = {
     guess: function(letter) {
         console.log("guess: " + letter);
         // Check if key is a letter
-        if (this.currentWord.includes(letter)) {
-            console.log("good guess!");
-            let i = 0
-            while (this.currentWord.indexOf(letter, i) > -1) {
-                this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(letter, i), letter);
-                i = this.currentWord.indexOf(letter, i) + 1;
+        if (isLetter(letter)) {
+            if (this.currentWord.includes(letter)) {
+                console.log("good guess!");
+                let i = 0
+                while (this.currentWord.indexOf(letter, i) > -1) {
+                    this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(letter, i), letter);
+                    i = this.currentWord.indexOf(letter, i) + 1;
+                }
+                if (this.displayedWord === this.currentWord) {
+                    this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
+                    this.numWins++;
+                    this.started = false;
+                }
+            } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
+                console.log("bad guess!");
+                this.guessesRemaining--;
+                console.log("guesses remaining: " + this.guessesRemaining);
+                this.wrongLetters += letter;
             }
-            if (this.displayedWord === this.currentWord) {
-                this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
-                this.numWins++;
+            this.updateScreen();
+
+            if (this.guessesRemaining <= 0) {
+                this.txtInstructions.textContent = "You lose! The correct answer was" + this.currentWord.toUpperCase() + ". Press any key to play again.";
                 this.started = false;
             }
-        } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
-            console.log("bad guess!");
-            this.guessesRemaining--;
-            console.log("guesses remaining: " + this.guessesRemaining);
-            this.wrongLetters += letter;
-        }
-        this.updateScreen();
-
-        if (this.guessesRemaining <= 0) {
-            this.txtInstructions.textContent = "You lose! The correct answer was" + this.currentWord.toUpperCase() + ". Press any key to play again.";
-            this.started = false;
-        }
+        }           
     },
 
     playSong: function() {
