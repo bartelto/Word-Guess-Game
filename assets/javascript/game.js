@@ -27,12 +27,12 @@ let game = {
     imageBank: [
         "cameron.png", 
         "sloane-peterson.jpg", 
-        "", 
+        "jeanie-bueller.jpg", 
         "edward-rooney.jpg",
-        "",
+        "grace.jpg",
         "",
         "ferris-bueller.jpg",
-        ""
+        "economics-teacher.jpg"
     ],
     songBank: [
         "Danke-Schoen.mp3",
@@ -134,7 +134,7 @@ let game = {
             this.updateScreen();
 
             if (this.guessesRemaining <= 0) {
-                this.txtInstructions.textContent = "You lose! The correct answer was" + this.currentWord.toUpperCase() + ". Press any key to play again.";
+                this.txtInstructions.textContent = "You lose! The correct answer was " + this.currentWord.toUpperCase() + ". Press any key to play again.";
                 this.started = false;
             }
         }           

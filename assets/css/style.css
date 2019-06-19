@@ -9,13 +9,12 @@
 
 #img-container {
     overflow: hidden;
-    max-height: 400px;
     background-position: center center;
     background-repeat: no-repeat;   
     border-bottom-width: 10px;
     border-color: darkred;
     border-style: solid;    
-    padding-bottom: 5px;
+    padding-bottom: 3px;
     position: relative;
 }   
 
@@ -40,13 +39,14 @@ h1, h2 {
     text-transform: uppercase; 
     color: black;
     text-align: center;
+    position: relative;
 }
 
 h1 {
     font-size: 72px;
     letter-spacing: -0.1em;
     font-weight: bold;
-    margin: 0px;
+    margin-top: 3px;
     line-height: 0.8em;
 }
 
@@ -54,7 +54,7 @@ h2 {
     font-size: 46px;
     letter-spacing: -.05em;
     font-weight: 900;
-    margin-top: -7px;
+    margin-top: -3px;
 }
 
 #instructions-box,
@@ -64,7 +64,7 @@ h2 {
 #guesses-remaining-box   {
     text-align: center;
     border-style: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-radius: 15px;
     padding: 10px;  
     margin: 5px 0;
@@ -78,29 +78,41 @@ h2 {
 
 #wins-box,
 #guesses-remaining-box   {
-    width: 150px;
+    width: 75px;
     background-color: white;
+    bottom: 10px;
 }
 
 #wins-box {
     position: absolute;
-    left: 10px;
-    bottom: 0;
+    left: 15px;
+}   
+
+#word-box p,
+#guess-box p {
+    margin-bottom: 10px;
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: black;
+    padding-bottom: 10px;
 }
 
-#guesses-remaining-box  {
+#guesses-remaining-box  {   
     position: absolute;
-    right: 10px;
-    bottom: 0;
+    right: 15px;
 }
 
 #num-wins,
 #guesses-remaining {
-    font-size: 50px;
+    font-size: 60px;
     color: darkred;
 }
 
 audio {
     width: 100%;
     border-radius: 15px;
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: white;
 }
