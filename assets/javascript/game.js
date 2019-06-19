@@ -14,8 +14,34 @@ function isLetter(inputChr) {
 }
 
 let game = {
-    wordBank: ["Cameron", "Sloan", "Jeannie", "Edward Rooney", "Grace", "Abe Froman", "Ferris Bueller"],
+    wordBank: [
+        "Cameron Frye", 
+        "Sloane Peterson", 
+        "Jeanie Bueller", 
+        "Edward Rooney", 
+        "Grace", 
+        "Abe Froman, the Sausage King of Chicago", 
+        "Ferris Bueller", 
+        "Economics Teacher"
+    ],
+    imageBank: [
+        "cameron.png", 
+        "sloane-peterson.jpg", 
+        "", 
+        "edward-rooney.jpg",
+        "",
+        "",
+        "ferris-bueller.jpg",
+        ""
+    ],
+    songBank: [
+        "Danke-Schoen.mp3",
+        "Oh-Yeah.mp3"//,
+        //"Twist-and-Shout.mp3"
+    ],
     currentWord: "", // chosen from the word bank
+    currentImage: "", // corresponds to the mystery word
+    currentSong: "", // plays when the player wins the game
     displayedWord: "", // only showing the letters that have been guessed
     started: false,
     guessesAllowed: 10,
@@ -40,7 +66,13 @@ let game = {
         this.txtDisplayedWord = document.getElementById('displayed-word');
         this.txtWrongLetters = document.getElementById('wrong-letters');
         this.audioPlayer = document.getElementsByTagName('audio')[0];
-        this.bigImage = document.getElementById('bigImage');
+        this.bigImage = document.getElementById('big-image');
+        for (let i=0; i<this.imageBank.length; i++) {
+            if (this.imageBank[i] === "") {
+                this.imageBank[i] = "art-museum.png";
+            }
+        }
+        this.bigImage.src = "assets/images/ferris-bueller.jpg";
     },
 
     start: function() {
@@ -57,7 +89,9 @@ let game = {
     },
 
     chooseWord: function() {
-        this.currentWord = this.wordBank[Math.floor(Math.random() * this.wordBank.length)].toLowerCase();
+        let randomIndex  = Math.floor(Math.random() * this.wordBank.length);
+        this.currentWord = this.wordBank[randomIndex].toLowerCase();
+        this.currentImage = this.imageBank[randomIndex]; // image to show when the puzzle is completed
         console.log("current word: " + this.currentWord);
         this.displayedWord = ('_').repeat(this.currentWord.length);
         if (this.currentWord.includes(' ')) { // show spaces
@@ -66,7 +100,13 @@ let game = {
                 this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(' ', i), ' ');
                 i = this.currentWord.indexOf(' ', i) + 1;
             }
+            i = 0;
+            while (this.currentWord.indexOf(',', i) > -1) {
+                this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(',', i), ',');
+                i = this.currentWord.indexOf(',', i) + 1;
+            }
         }
+        this.currentSong = this.songBank[Math.floor(Math.random() * this.songBank.length)];
     },
 
     guess: function(letter) {
@@ -83,9 +123,6 @@ let game = {
                 this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
                 this.numWins++;
                 this.started = false;
-                this.audioPlayer.play();
-                this.audioPlayer.controls = true;
-                this.bigImage.src = "assets/images/ferris-bueller.jpg";
             }
         } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
             console.log("bad guess!");
@@ -99,6 +136,13 @@ let game = {
             this.txtInstructions.textContent = "You lose! The correct answer was" + this.currentWord.toUpperCase() + ". Press any key to play again.";
             this.started = false;
         }
+    },
+
+    playSong: function() {
+        this.audioPlayer.src = "assets/audio/" + this.currentSong;
+        this.audioPlayer.play();
+        this.audioPlayer.controls = true;
+        this.bigImage.src = "assets/images/" + this.currentImage;
     },
 
     updateScreen: function() {
@@ -117,6 +161,9 @@ document.onkeyup = function(event) {
         game.start();
     } else if (isLetter(event.key)) {
         game.guess(event.key);
+        if (!game.started) {
+            game.playSong();
+        }
     }
 }
 

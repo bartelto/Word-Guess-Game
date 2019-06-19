@@ -1,14 +1,50 @@
 #big-image {
     width: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    object-position: center;
+    object-fit: cover;
     
 }
 
 #img-container {
     overflow: hidden;
-    max-height: 200px;
+    max-height: 350px;
+    background-position: center center;
+    background-repeat: no-repeat;   
+    border-bottom-width: 10px;
+    border-color: darkred;
+    border-style: solid;    
+    padding-bottom: 5px;
 }   
 
 #displayed-word,
 #wrong-letters {
-    letter-spacing: 0.5em;
+    letter-spacing: 0.5em;  
+}
+
+p {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1, h2 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-transform: uppercase; 
+    color: black;
+    text-align: center;
+}
+
+h1 {
+    font-size: 72px;
+    letter-spacing: -0.1em;
+    font-weight: bold;
+    margin: 0px;
+    line-height: 0.8em;
+}
+
+h2 {
+    font-size: 46px;
+    letter-spacing: -.05em;
+    font-weight: 900;
+    margin: -7px;
 }
