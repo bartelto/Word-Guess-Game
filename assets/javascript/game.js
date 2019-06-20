@@ -41,7 +41,7 @@ let game = {
     ],
     currentWord: "", // chosen from the word bank
     currentImage: "", // corresponds to the mystery word
-    currentSong: "", // plays when the player wins the game
+    currentSongIndex: 0, // plays when the player wins the game
     displayedWord: "", // only showing the letters that have been guessed
     started: false,
     guessesAllowed: 10,
@@ -61,7 +61,7 @@ let game = {
     boxWrongLetters: "",
     
     init: function() {
-        console.log("init function");
+        //console.log("init function");
         this.txtInstructions = document.getElementById('instructions');
         this.txtNumWins = document.getElementById('num-wins');
         this.txtGuessesRemaining = document.getElementById('guesses-remaining');
@@ -82,7 +82,7 @@ let game = {
     },
 
     start: function() {
-        console.log("start function");
+        //console.log("start function");
         this.started = true;
         this.txtInstructions.textContent = "Type a letter to guess!"; // Clear txtInstructions from screen
         this.chooseWord();
@@ -96,10 +96,17 @@ let game = {
     },
 
     chooseWord: function() {
+        // ensure that we don't use the same word twice in a row
         let randomIndex  = Math.floor(Math.random() * this.wordBank.length);
-        this.currentWord = this.wordBank[randomIndex].toLowerCase();
+        let newWord = this.wordBank[randomIndex].toLowerCase();
+        if (newWord !== this.currentWord) {
+            this.currentWord = newWord;
+        } else {
+            randomIndex = (randomIndex + 1) % this.wordBank.length; // next word in wordBank
+            this.currentWord = this.wordBank[randomIndex].toLowerCase();
+        }
         this.currentImage = this.imageBank[randomIndex]; // image to show when the puzzle is completed
-        console.log("current word: " + this.currentWord);
+        //console.log("current word: " + this.currentWord);
         this.displayedWord = ('_').repeat(this.currentWord.length);
         if (this.currentWord.includes(' ')) { // show spaces
             let i = 0
@@ -117,40 +124,49 @@ let game = {
     },
 
     guess: function(letter) {
-        console.log("guess: " + letter);
-        // Check if key is a letter
-        if (isLetter(letter)) {
-            if (this.currentWord.includes(letter)) {
-                console.log("good guess!");
-                let i = 0
-                while (this.currentWord.indexOf(letter, i) > -1) {
-                    this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(letter, i), letter);
-                    i = this.currentWord.indexOf(letter, i) + 1;
-                }
-                if (this.displayedWord === this.currentWord) {
-                    this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
-                    this.numWins++;
-                    this.started = false;
-                }
-            } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
-                console.log("bad guess!");
-                this.guessesRemaining--;
-                console.log("guesses remaining: " + this.guessesRemaining);
-                this.wrongLetters += letter;
+    
+        let won = false;
+        
+        if (this.currentWord.includes(letter)) {
+            //console.log("good guess!");
+            let i = 0
+            while (this.currentWord.indexOf(letter, i) > -1) {
+                this.displayedWord = replaceAt(this.displayedWord, this.currentWord.indexOf(letter, i), letter);
+                i = this.currentWord.indexOf(letter, i) + 1;
             }
-            this.updateScreen();
-
-            if (this.guessesRemaining <= 0) {
-                this.txtInstructions.textContent = "You lose! The correct answer was " + this.currentWord.toUpperCase() + ". Press any key to play again.";
+            if (this.displayedWord === this.currentWord) {
+                this.txtInstructions.textContent = "You win! Nice job. Press any key to play again.";
+                this.numWins++;
                 this.started = false;
+                won = true;
             }
-        }           
+        } else if (!this.wrongLetters.includes(letter)) { // ignore wrong guesses that have already been made
+            //console.log("bad guess!");
+            this.guessesRemaining--;
+            //console.log("guesses remaining: " + this.guessesRemaining);
+            this.wrongLetters += letter;
+        }
+
+        if (this.guessesRemaining <= 0) {
+            this.txtInstructions.textContent = "You lose! The correct answer was " + this.currentWord.toUpperCase() + ". Press any key to play again.";
+            this.started = false;
+        }
+
+        this.updateScreen();
+
+        if (won) {
+            game.winReward();
+        }
+          
     },
 
-    playSong: function() {
-        this.audioPlayer.src = "assets/audio/" + this.currentSong;
+    winReward: function() {
+        // song selection rotates, in order, through the songBank
+        this.audioPlayer.src = "assets/audio/" + this.songBank[this.currentSongIndex];
+        this.currentSongIndex = (this.currentSongIndex + 1) % this.songBank.length;
         this.audioPlayer.play();
         this.audioPlayer.controls = true;
+        // show image corresponding to the word or phrase
         this.bigImage.src = "assets/images/" + this.currentImage;
     },
 
@@ -170,9 +186,6 @@ document.onkeyup = function(event) {
         game.start();
     } else if (isLetter(event.key)) {
         game.guess(event.key);
-        if (!game.started) {
-            game.playSong();
-        }
     }
 }
 
