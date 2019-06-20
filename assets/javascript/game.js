@@ -31,7 +31,7 @@ let game = {
         "edward-rooney.jpg",
         "grace.jpg",
         "",
-        "ferris-bueller.jpg",
+        "ferris-showering.jpg",
         "economics-teacher.jpg"
     ],
     songBank: [
@@ -57,6 +57,8 @@ let game = {
     txtGuessesRemaining: "",
     txtWrongLetters: "",
     txtNumWins: "",
+    boxDisplayedWord: "",
+    boxWrongLetters: "",
     
     init: function() {
         console.log("init function");
@@ -73,6 +75,10 @@ let game = {
             }
         }
         this.bigImage.src = "assets/images/ferris-bueller.jpg";
+        this.boxDisplayedWord = document.getElementById('word-box');
+        this.boxDisplayedWord.style.visibility = "hidden";
+        this.boxWrongLetters = document.getElementById('guess-box');
+        this.boxWrongLetters.style.visibility = "hidden";
     },
 
     start: function() {
@@ -85,7 +91,8 @@ let game = {
         this.updateScreen();
         this.audioPlayer.pause();
         this.audioPlayer.controls = false;
-        
+        this.boxDisplayedWord.style.visibility = "visible";
+        this.boxWrongLetters.style.visibility = "visible";
     },
 
     chooseWord: function() {
