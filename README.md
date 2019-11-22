@@ -5,3 +5,7 @@ Think you know the ins and outs of one of the greatest teen comedies of the '80'
 Play again and again, and watch your score grow! (Save Ferris!)
 
 https://bartelto.github.io/word-guess-game/
+
+## The author
+
+This app was developed by **Todd F. Bartelt** as part of the Full-Stack Web Development program at University of Kansas Professional and Continuing Education. Learn more about Todd at [toddbartelt.com](http://toddbartelt.com).
